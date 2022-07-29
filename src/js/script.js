@@ -43,8 +43,8 @@
   const settings = {
     amountWidget: {
       defaultValue: 1,
-      defaultMin: 1,
-      defaultMax: 9,
+      defaultMin: 0,
+      defaultMax: 10,
     },
   };
 
@@ -65,9 +65,10 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
 
-      console.log('newProduct:', thisProduct);
+      // console.log('newProduct:', thisProduct);
     }
     renderInMenu() {
       const thisProduct = this;
@@ -101,6 +102,9 @@
       );
       thisProduct.imageWrapper = thisProduct.element.querySelector(
         select.menuProduct.imageWrapper
+      );
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(
+        select.menuProduct.amountWidget
       );
     }
 
@@ -143,7 +147,7 @@
         event.preventDefault();
         thisProduct.processOrder();
       });
-      console.log('initOrderForm');
+      // console.log('initOrderForm');
     }
 
     processOrder() {
@@ -151,7 +155,7 @@
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      // console.log('formData', formData);
       // set price to default price
       let price = thisProduct.data.price;
 
@@ -165,7 +169,7 @@
         for (let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log(optionId, option);
+          // console.log(optionId, option);
 
           // solution1?
           // if (formData.hasOwnProperty(paramId)) {
@@ -186,7 +190,7 @@
             formData[paramId] && formData[paramId].includes(optionId);
 
           if (optionSelected) {
-            console.log(optionId);
+            // console.log(optionId);
             // check if the option is not default
             if (!option.default) {
               // add option price to price variable
@@ -211,16 +215,96 @@
           }
         }
       }
+      // multiply price by amount
+      price *= thisProduct.amountWidget.value;
 
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
+    }
+
+    initAmountWidget() {
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function () {
+        thisProduct.processOrder();
+      });
+    }
+  }
+
+  class AmountWidget {
+    constructor(element) {
+      const thisWidget = this;
+
+      thisWidget.getElements(element);
+      thisWidget.setValue(settings.amountWidget.defaultValue);
+      thisWidget.initActions();
+
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+    }
+
+    getElements(element) {
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(
+        select.widgets.amount.input
+      );
+      thisWidget.linkDecrease = thisWidget.element.querySelector(
+        select.widgets.amount.linkDecrease
+      );
+      thisWidget.linkIncrease = thisWidget.element.querySelector(
+        select.widgets.amount.linkIncrease
+      );
+    }
+
+    setValue(value) {
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+
+      if (
+        thisWidget.value !== newValue &&
+        !isNaN(newValue) &&
+        newValue >= settings.amountWidget.defaultMin &&
+        newValue <= settings.amountWidget.defaultMax
+      )
+        thisWidget.value = newValue;
+
+      thisWidget.input.value = thisWidget.value;
+      thisWidget.announce();
+    }
+
+    initActions() {
+      const thisWidget = this;
+
+      thisWidget.input.addEventListener('change', function () {
+        thisWidget.setValue(thisWidget.input.value);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function (event) {
+        event.preventDefault;
+        thisWidget.setValue(thisWidget.value - 1);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function (event) {
+        event.preventDefault;
+        thisWidget.setValue(thisWidget.value + 1);
+      });
+    }
+
+    announce() {
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
     }
   }
 
   const app = {
     initMenu: function () {
       const thisApp = this;
-      console.log('thisApp.data:', thisApp.data);
+      // console.log('thisApp.data:', thisApp.data);
       for (let productData in thisApp.data.products) {
         new Product(productData, thisApp.data.products[productData]);
       }
