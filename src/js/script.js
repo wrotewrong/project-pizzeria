@@ -579,7 +579,7 @@
       thisCartProduct.initAmountWidget();
       thisCartProduct.initActions();
 
-      // console.log('thisCartProduct', thisCartProduct);
+      console.log('thisCartProduct', thisCartProduct);
     }
 
     getElements(element) {
@@ -645,13 +645,24 @@
     getData() {
       const thisCartProduct = this;
 
+      const getParamsIds = function () {
+        const paramObjects = {};
+        for (let paramId in thisCartProduct.params) {
+          paramObjects[paramId] = [];
+          for (let optionID in thisCartProduct.params[paramId].options) {
+            paramObjects[paramId].push(optionID);
+          }
+        }
+        return paramObjects;
+      };
+
       return {
         id: thisCartProduct.id,
         amount: thisCartProduct.amount,
         price: thisCartProduct.price,
         priceSingle: thisCartProduct.priceSingle,
         name: thisCartProduct.name,
-        params: thisCartProduct.params,
+        params: getParamsIds(),
       };
     }
   }
