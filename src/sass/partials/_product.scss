@@ -121,3 +121,7 @@
     padding: 0;
   }
 }
+
+.extended {
+  padding-top: ($base-size * 3) + ($base-size * 10) + ($base-size * 6.8);
+}

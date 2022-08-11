@@ -656,6 +656,24 @@
     }
   }
 
+  // sticky header
+  const header = document.querySelector('.header');
+  const content = document.querySelector(select.containerOf.menu);
+  const headerPaddingTop = parseInt(
+    window.getComputedStyle(header, null).getPropertyValue('padding-top')
+  );
+
+  window.addEventListener('scroll', function () {
+    if (window.pageYOffset > headerPaddingTop) {
+      header.classList.add('sticky');
+      content.classList.add('extended');
+    } else {
+      header.classList.remove('sticky');
+      content.classList.remove('extended');
+    }
+  });
+  // sticky header
+
   const app = {
     initMenu: function () {
       const thisApp = this;

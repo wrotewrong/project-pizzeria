@@ -31,3 +31,12 @@
     font-style: italic;
   }
 }
+
+.sticky {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  transition: padding-bottom 0.5s;
+}
