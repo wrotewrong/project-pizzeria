@@ -1,6 +1,7 @@
 import { settings, select, classNames, templates } from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
+import Booking from './components/Booking.js';
 
 // sticky header
 const header = document.querySelector('.header');
@@ -118,6 +119,12 @@ const app = {
     });
   },
 
+  initBooking: function () {
+    const thisApp = this;
+    const bookingWidget = document.querySelector(select.containerOf.booking);
+    thisApp.booking = new Booking(bookingWidget);
+  },
+
   init: function () {
     const thisApp = this;
     console.log('*** App starting ***');
@@ -131,6 +138,8 @@ const app = {
     thisApp.initData();
     // thisApp.initMenu();
     thisApp.initCart();
+
+    thisApp.initBooking();
   },
 };
 
