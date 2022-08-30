@@ -159,7 +159,7 @@ class Booking {
       } else {
         table.classList.remove(classNames.booking.tableBooked);
       }
-      table.classList.remove('selected');
+      table.classList.remove(classNames.booking.selected);
     }
     thisBooking.selectTableId = null;
     // console.log('tojestbooking', thisBooking);
@@ -171,17 +171,20 @@ class Booking {
     if (e.target.classList.contains('table')) {
       // console.log('stolik');
 
-      if (!e.target.classList.contains('booked')) {
+      if (!e.target.classList.contains(classNames.booking.tableBooked)) {
         for (let table of thisBooking.dom.tables) {
-          if (table.classList.contains('selected') && table !== e.target)
-            table.classList.remove('selected');
+          if (
+            table.classList.contains(classNames.booking.selected) &&
+            table !== e.target
+          )
+            table.classList.remove(classNames.booking.selected);
         }
 
-        if (e.target.classList.contains('selected')) {
-          e.target.classList.remove('selected');
+        if (e.target.classList.contains(classNames.booking.selected)) {
+          e.target.classList.remove(classNames.booking.selected);
           thisBooking.selectTableId = null;
         } else {
-          e.target.classList.add('selected');
+          e.target.classList.add(classNames.booking.selected);
           thisBooking.selectTableId = parseInt(
             e.target.getAttribute(settings.booking.tableIdAttribute)
           );
@@ -292,6 +295,7 @@ class Booking {
           parsedResponse.duration,
           parsedResponse.table
         );
+        thisBooking.updateDOM();
         // console.log('thisBooking.booked after response:', thisBooking.booked);
       });
   }
