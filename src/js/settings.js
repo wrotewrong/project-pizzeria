@@ -3,8 +3,10 @@ export const select = {
     menuProduct: '#template-menu-product',
     cartProduct: '#template-cart-product', // CODE ADDED
     bookingWidget: '#template-booking-widget',
+    homePage: '#template-homepage',
   },
   containerOf: {
+    home: '.home-wrapper',
     menu: '#product-list',
     cart: '#cart',
     pages: '#pages',
@@ -147,5 +149,8 @@ export const templates = {
   // CODE ADDED END
   bookingWidget: Handlebars.compile(
     document.querySelector(select.templateOf.bookingWidget).innerHTML
+  ),
+  homePage: Handlebars.compile(
+    document.querySelector(select.templateOf.homePage).innerHTML
   ),
 };
