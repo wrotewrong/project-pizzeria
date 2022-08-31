@@ -267,12 +267,15 @@ class Booking {
       address: thisBooking.dom.address.value,
     };
 
-    // console.log('payload:', payload);
+    console.log('payload:', payload);
 
-    for (let checkbox of thisBooking.dom.checkboxes) {
-      if (checkbox.checked) {
-        payload.starters.push(checkbox.value);
-      }
+    if (thisBooking.dom.checkboxes[1].checked) {
+      payload.starters.push(
+        thisBooking.dom.checkboxes[0].value,
+        thisBooking.dom.checkboxes[1].value
+      );
+    } else if (thisBooking.dom.checkboxes[0].checked) {
+      payload.starters.push(thisBooking.dom.checkboxes[0].value);
     }
 
     const options = {
