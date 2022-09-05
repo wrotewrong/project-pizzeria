@@ -6,7 +6,9 @@ export const select = {
     homePage: '#template-homepage',
   },
   containerOf: {
+    homeId: 'home',
     home: '.home-wrapper',
+    homeLinks: '.links a',
     menu: '#product-list',
     cart: '#cart',
     pages: '#pages',
